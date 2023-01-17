@@ -11,6 +11,26 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'category',
+    loadChildren: () => import('./pages/author-posts/category/category.module').then( m => m.CategoryPageModule)
+  },
+  {
+    path: 'categories',
+    loadChildren: () => import('./pages/author-posts/categories/categories.module').then( m => m.CategoriesPageModule)
+  },
+  {
+    path: 'author',
+    loadChildren: () => import('./pages/author-posts/author/author.module').then( m => m.AuthorPageModule)
+  },
+  {
+    path: 'authors',
+    loadChildren: () => import('./pages/author-posts/authors/authors.module').then( m => m.AuthorsPageModule)
+  },
+  {
+    path: 'posts',
+    loadChildren: () => import('./pages/author-posts/posts/posts.module').then( m => m.PostsPageModule)
+  },
 ];
 
 @NgModule({

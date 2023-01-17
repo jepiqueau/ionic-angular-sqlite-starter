@@ -1,0 +1,93 @@
+import { Component, OnInit, ElementRef, Input } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { AuthorPostsService } from 'src/app/services/author-posts.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
+import { Category } from 'src/app/models/author-posts';
+import { Toast } from '@capacitor/toast';
+
+@Component({
+  selector: 'app-categories',
+  templateUrl: './categories.page.html',
+  styleUrls: ['./categories.page.scss'],
+})
+export class CategoriesPage implements OnInit {
+  @Input() selectCategory!: Category;
+
+  updCategory!: Category;
+  private categoryEL: any;
+
+  constructor(private authorPostsService: AuthorPostsService,
+              private modalCtrl: ModalController,
+              private sqliteService: SQLiteService,
+              private elementRef : ElementRef) {
+
+  }
+
+  ngOnInit() {
+    this.categoryEL = this.elementRef.nativeElement.querySelector(`#categories-cmp-category`);
+  }
+  // Private functions
+  /**
+   * Close
+   * @returns
+   */
+  async close() {
+    // check if selectCategory still exists
+    if(!this.selectCategory) {
+      return this.modalCtrl.dismiss(null, 'close');
+    }
+    const catExist: Category = await this.authorPostsService.getCategory(this.selectCategory);
+
+    if(catExist && catExist.id > 0) {
+      return this.modalCtrl.dismiss(catExist, 'close');
+    } else {
+      return this.modalCtrl.dismiss(null, 'close');
+    }
+  }
+  /**
+   * handle the outCategory Event from cmp-category component
+   * @param category
+   * @returns
+   */
+  async handleOutCategory(category:Category) {
+    if(category && category.id > 0) {
+      try {
+        const mCategory: Category = category;
+        const updCategory = await this.authorPostsService.getCategory(mCategory);
+        await this.authorPostsService.getAllCategories();
+        await this.authorPostsService.getAllIdsSeq();
+        if (this.sqliteService.platform === 'web') {
+          // save the databases from memory to store
+          await this.sqliteService.sqliteConnection.saveToStore(this.authorPostsService.databaseName);
+        }
+        this.categoryEL.classList.add('hidden');
+      } catch (err: any) {
+        const msg = err.message ? err.message : err;
+        console.log(`onSubmit Update Category: ${err}`);
+        await Toast.show({
+          text: `onSubmit Update Category: ${err} `,
+          duration: 'long'
+        });
+      }
+    } else {
+      await Toast.show({
+        text: `onSubmit Update Category: id <= 0 `,
+        duration: 'long'
+      });
+    }
+  }
+  /**
+   * handle the toUpdateCategory Event from cmp-categories component
+   * @param data
+   * @returns
+   */
+  async handleToUpdateCategory(data:any) {
+    if(this.sqliteService.platform === 'web') {
+      await this.sqliteService.sqliteConnection.saveToStore(data.database);
+    }
+    if(data.command === 'update') {
+      this.updCategory = data.category;
+      this.categoryEL.classList.remove('hidden');
+    }
+  }
+}
