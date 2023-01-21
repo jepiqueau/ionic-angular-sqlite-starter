@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AuthorPostsService } from 'src/app/services/author-posts.service';
-import { IdsSeq, Author } from 'src/app/models/author-posts';
+import { Author } from 'src/app/models/author-posts';
+import { IdsSeq } from 'src/app/models/ids-seq';
 
 @Component({
   selector: 'cmp-author',
@@ -99,7 +100,7 @@ export class AuthorComponent implements OnInit {
     if(this.isUpdate) {
       authorId = this.currentVal.id;
     } else {
-      const author = this.idsSeqList.filter(x => x.name === "category")[0];
+      const author = this.idsSeqList.filter(x => x.name === "author")[0];
       if(author) {
         authorId = author.seq + 1;
       }

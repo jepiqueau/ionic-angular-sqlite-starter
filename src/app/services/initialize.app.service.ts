@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { SQLiteService } from './sqlite.service';
 import { AuthorPostsService } from './author-posts.service';
+import { DepartmentEmployeesService } from './department-employees.service';
 import { Toast } from '@capacitor/toast';
 
 @Injectable()
@@ -11,7 +12,9 @@ export class InitializeAppService {
 
   constructor(
     private sqliteService: SQLiteService,
-    private authorPostsService: AuthorPostsService) {
+    private authorPostsService: AuthorPostsService,
+    private departmentEmployeesService: DepartmentEmployeesService
+    ) {
 
   }
 
@@ -25,7 +28,10 @@ export class InitializeAppService {
         }
         // Initialize the starter_posts database
         await this.authorPostsService.initializeDatabase();
+        // Initialize the starter_employees database
+        await this.departmentEmployeesService.initializeDatabase();
         // Initialize any other database if any
+
         this.isAppInit = true;
 
       } catch (error) {

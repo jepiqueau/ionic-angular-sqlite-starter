@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Toast } from '@capacitor/toast';
 import { ModalController } from '@ionic/angular';
 import { PostsPage } from 'src/app/pages/author-posts/posts/posts.page';
+import { EmployeesPage } from 'src/app/pages/employee-dept/employees/employees.page';
 import { InitializeAppService } from 'src/app/services/initialize.app.service';
 import { App } from '@capacitor/app';
 
@@ -30,13 +31,13 @@ export class HomePage implements OnInit {
       canDismiss: true
     });
     modal.present();
-
   }
-  async usersClick() {
-    await Toast.show({
-      text: `Not implemented `,
-      duration: 'long'
+  async employeesClick() {
+    const modal = await this.modalCtrl.create({
+      component: EmployeesPage,
+      canDismiss: true
     });
+    modal.present();
   }
 
   exitApp() {

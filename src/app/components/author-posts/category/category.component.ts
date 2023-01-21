@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AuthorPostsService } from 'src/app/services/author-posts.service';
-import { IdsSeq, Category } from 'src/app/models/author-posts';
+import { Category } from 'src/app/models/author-posts';
+import { IdsSeq } from 'src/app/models/ids-seq';
 
 @Component({
   selector: 'cmp-category',

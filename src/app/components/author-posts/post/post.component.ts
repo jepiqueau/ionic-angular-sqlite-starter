@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Toast } from '@capacitor/toast';
 import { ModalController } from '@ionic/angular';
 import { AuthorPostsService } from 'src/app/services/author-posts.service';
-import { IdsSeq, Category, Author, PostData } from 'src/app/models/author-posts';
+import { Category, Author, PostData } from 'src/app/models/author-posts';
+import { IdsSeq } from 'src/app/models/ids-seq';
 import { CategoryPage } from 'src/app/pages/author-posts/category/category.page';
 import { CategoriesPage } from 'src/app/pages/author-posts/categories/categories.page';
 import { AuthorPage } from 'src/app/pages/author-posts/author/author.page';
@@ -49,7 +50,6 @@ export class PostComponent implements OnInit {
   public authorList: Author[] = [];
   public categoryList: Category[] = [];
   public currentCategory!: string;
-  public newCategory: Category[] = [];
   public newAuthor: Author[] = [];
   public newPost: PostData[] = [];
   public currentVal!: PostData;
@@ -122,7 +122,9 @@ export class PostComponent implements OnInit {
       fg_author: this.authorGroup,
       fg_post: this.postGroup,
     });
-    this.categories!.setValue(this.defCategories);
+    if(this.defCategories.length > 0) {
+      this.categories!.setValue(this.defCategories);
+    }
     if(this.defAuthor.length === 1) {
       this.author!.setValue(this.defAuthor[0]);
     }
@@ -196,19 +198,23 @@ export class PostComponent implements OnInit {
     const modal = await this.modalCtrl.create({
       component: CategoriesPage,
       componentProps: {
-        selectCategory: this.newCategory[0],
+        selectCategory: this.defCategories,
       },
       canDismiss: true
     });
     modal.present();
     const { data, role } = await modal.onWillDismiss();
+
     if (role === 'close') {
-      this.newCategory = [];
+      const newCategories: Category[] = [];
       if(data) {
-        const mId = data.id;
-        const index = this.categoryList.indexOf(this.categoryList.filter((x) => x.id === mId )[0]);
-        this.newCategory.push(this.categoryList[index]);
+        for ( const cat of data ) {
+          const mId = cat.id;
+          const index = this.categoryList.indexOf(this.categoryList.filter((x) => x.id === mId)[0]);
+          newCategories.push(this.categoryList[index]);
+        }
       }
+      this.categories!.setValue(newCategories);
     }
   }
   /**
@@ -297,18 +303,5 @@ export class PostComponent implements OnInit {
     }
 
     return o1.id === o2.id;
-  }
-  /**
-   * handle the change category event
-   */
-  handleChangeCategory() {
-    const categories: Category[] = this.categories!.value;
-    if(!categories) return;
-    const strCategories: string[] = [];
-    for( const category of categories) {
-      strCategories.push(category.name);
-    }
-    this.currentCategory = strCategories.toString();
-    return;
   }
 }

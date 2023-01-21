@@ -61,12 +61,11 @@ export class SQLiteService {
         return ret;
     } catch(err:any) {
       const msg = err.message ? err.message : err;
-      console.log(`findOneBy err: ${msg}`)
       throw new Error(`findOneBy err: ${msg}`);
     }
   }
-  async save(mDb: SQLiteDBConnection, table: string, mObj: any, update?:boolean): Promise<void> {
-      const isUpdate: boolean = update ? update : false;
+  async save(mDb: SQLiteDBConnection, table: string, mObj: any, where?: any): Promise<void> {
+      const isUpdate: boolean = where ? true : false;
       const keys: string[] = Object.keys(mObj);
       let stmt: string = '';
       let values: any[] = [];
@@ -82,12 +81,13 @@ export class SQLiteService {
         stmt = `INSERT INTO ${table} (${keys.toString()}) VALUES (${qMarks.toString()});`;
       } else {
         // UPDATE
+        const wKey: string = Object.keys(where)[0];
+
         const setString: string = await this.setNameForUpdate(keys);
         if(setString.length === 0) {
           return Promise.reject(`save: update no SET`);
         }
-        stmt = `UPDATE ${table} SET ${setString} WHERE `;
-        stmt += `id = ${mObj.id};`;
+        stmt = `UPDATE ${table} SET ${setString} WHERE ${wKey}=${where[wKey]}`;
       }
       const ret = await mDb.run(stmt,values);
       if(ret.changes!.changes != 1) {

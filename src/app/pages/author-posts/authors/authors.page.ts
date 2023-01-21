@@ -15,6 +15,7 @@ export class AuthorsPage implements OnInit {
 
   updAuthor!: Author;
   private authorEL: any;
+  private selAuthor: Author = this.selectAuthor;
 
   constructor(private authorPostsService: AuthorPostsService,
     private modalCtrl: ModalController,
@@ -32,10 +33,10 @@ export class AuthorsPage implements OnInit {
    */
   async close() {
     // check if selectAuthor still exists
-    if(!this.selectAuthor) {
+    if(!this.selAuthor) {
       return this.modalCtrl.dismiss(null, 'close');
     }
-    const autExist: Author = await this.authorPostsService.getAuthor(this.selectAuthor);
+    const autExist: Author = await this.authorPostsService.getAuthor(this.selAuthor);
 
     if(autExist && autExist.id > 0) {
       return this.modalCtrl.dismiss(autExist, 'close');
@@ -52,8 +53,9 @@ export class AuthorsPage implements OnInit {
     if(author && author.id > 0) {
       const mAuthor: Author = author;
       try {
-        const updAuthor = await this.authorPostsService.getAuthor(mAuthor);
+        this.selAuthor = await this.authorPostsService.getAuthor(mAuthor);
         await this.authorPostsService.getAllAuthors();
+        await this.authorPostsService.getAllPosts();
         await this.authorPostsService.getAllIdsSeq();
         if (this.sqliteService.platform === 'web') {
           // save the databases from memory to store
@@ -62,9 +64,9 @@ export class AuthorsPage implements OnInit {
         this.authorEL.classList.add('hidden');
       } catch (err: any) {
         const msg = err.message ? err.message : err;
-        console.log(`onSubmit Update Author: ${err}`);
+        console.log(`onSubmit Update Author: ${msg}`);
         await Toast.show({
-          text: `onSubmit Update Author: ${err} `,
+          text: `onSubmit Update Author: ${msg} `,
           duration: 'long'
         });
       }

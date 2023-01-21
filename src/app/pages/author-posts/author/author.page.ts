@@ -48,7 +48,7 @@ export class AuthorPage implements OnInit {
         }
       } catch (err: any) {
         const msg = err.message ? err.message : err;
-        console.log(`onSubmit Author: ${err}`);
+        console.log(`onSubmit Author: ${msg}`);
         await Toast.show({
           text: `onSubmit Author: ${err} `,
           duration: 'long'

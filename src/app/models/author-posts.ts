@@ -31,7 +31,3 @@ export class PostData {
   author!: Author;
   categories!: Category[];
 }
-export class IdsSeq {
-  name!: string;
-  seq!: number;
-}

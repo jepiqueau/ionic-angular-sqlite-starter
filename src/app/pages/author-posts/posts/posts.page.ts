@@ -74,7 +74,7 @@ export class PostsPage implements OnInit {
     if(post && post.id > 0) {
       const postJson: JsonPost = this.authorPostsService.getJsonPostFromPostData(post);
       try {
-        const jsonPost: JsonPost = await this.authorPostsService.getPost(postJson);
+        await this.authorPostsService.getPost(postJson);
         await this.authorPostsService.getAllPosts();
         await this.authorPostsService.getAllIdsSeq();
         if (this.sqliteService.platform === 'web') {

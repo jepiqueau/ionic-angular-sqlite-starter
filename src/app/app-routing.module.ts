@@ -31,6 +31,22 @@ const routes: Routes = [
     path: 'posts',
     loadChildren: () => import('./pages/author-posts/posts/posts.module').then( m => m.PostsPageModule)
   },
+  {
+    path: 'employees',
+    loadChildren: () => import('./pages/employee-dept/employees/employees.module').then( m => m.EmployeesPageModule)
+  },
+  {
+    path: 'employee',
+    loadChildren: () => import('./pages/employee-dept/employee/employee.module').then( m => m.EmployeePageModule)
+  },
+  {
+    path: 'department',
+    loadChildren: () => import('./pages/employee-dept/department/department.module').then( m => m.DepartmentPageModule)
+  },
+  {
+    path: 'departments',
+    loadChildren: () => import('./pages/employee-dept/departments/departments.module').then( m => m.DepartmentsPageModule)
+  },
 ];
 
 @NgModule({

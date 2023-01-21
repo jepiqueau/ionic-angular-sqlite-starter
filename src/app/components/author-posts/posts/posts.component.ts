@@ -33,7 +33,8 @@ export class PostsComponent implements OnInit {
    * Update a post
    * @param post
    */
-  updatePost(postData: PostData) {
+  async updatePost(postData: PostData) {
+    await this.authorPostsService.getAllPosts();
     this.insidePostEvent.emit();
     this.toUpdatePost.emit({command: "update", database: this.authorPostsService.databaseName, post: postData});
   }

@@ -11,10 +11,11 @@ import { Toast } from '@capacitor/toast';
   styleUrls: ['./categories.page.scss'],
 })
 export class CategoriesPage implements OnInit {
-  @Input() selectCategory!: Category;
+  @Input() selectCategory!: Category[];
 
   updCategory!: Category;
   private categoryEL: any;
+  private selCats!: Category[];
 
   constructor(private authorPostsService: AuthorPostsService,
               private modalCtrl: ModalController,
@@ -25,6 +26,7 @@ export class CategoriesPage implements OnInit {
 
   ngOnInit() {
     this.categoryEL = this.elementRef.nativeElement.querySelector(`#categories-cmp-category`);
+    this.selCats = [...this.selectCategory]
   }
   // Private functions
   /**
@@ -32,14 +34,19 @@ export class CategoriesPage implements OnInit {
    * @returns
    */
   async close() {
-    // check if selectCategory still exists
-    if(!this.selectCategory) {
+    // check if seltCats still exists
+    if(!this.selCats) {
       return this.modalCtrl.dismiss(null, 'close');
     }
-    const catExist: Category = await this.authorPostsService.getCategory(this.selectCategory);
-
-    if(catExist && catExist.id > 0) {
-      return this.modalCtrl.dismiss(catExist, 'close');
+    const catsExist: Category[] = [];
+    for (const cat of this.selCats) {
+      const catExist: Category = await this.authorPostsService.getCategory(cat);
+      if(catExist && catExist.id > 0) {
+        catsExist.push(cat);
+      }
+    }
+    if(catsExist.length > 0) {
+      return this.modalCtrl.dismiss(catsExist, 'close');
     } else {
       return this.modalCtrl.dismiss(null, 'close');
     }
@@ -50,11 +57,18 @@ export class CategoriesPage implements OnInit {
    * @returns
    */
   async handleOutCategory(category:Category) {
+
     if(category && category.id > 0) {
       try {
+
         const mCategory: Category = category;
         const updCategory = await this.authorPostsService.getCategory(mCategory);
+        const mId = updCategory.id;
+        const index = this.selCats.indexOf(this.selCats.filter((x) => x.id === mId )[0]);
+        this.selCats[index].name = updCategory.name;
+
         await this.authorPostsService.getAllCategories();
+        await this.authorPostsService.getAllPosts();
         await this.authorPostsService.getAllIdsSeq();
         if (this.sqliteService.platform === 'web') {
           // save the databases from memory to store

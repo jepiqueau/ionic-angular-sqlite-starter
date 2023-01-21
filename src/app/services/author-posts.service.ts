@@ -7,8 +7,8 @@ import { environment } from 'src/environments/environment';
 import { authorPostsVersionUpgrades } from 'src/app/upgrades/author-posts/upgrade-statements';
 
 import { MOCK_POSTS, MOCK_CATEGORIES, MOCK_AUTHORS} from '../mock-data/posts-categories-authors';
-import { IdsSeq, JsonPost, Post, Author, Category, PostData } from '../models/author-posts';
-
+import { JsonPost, Post, Author, Category, PostData } from '../models/author-posts';
+import { IdsSeq } from '../models/ids-seq';
 
 @Injectable()
 export class AuthorPostsService {
@@ -50,7 +50,6 @@ export class AuthorPostsService {
     }
     await this.getAllAuthors();
     this.isAuthorReady.next(true);
-
     await this.getAllCategories();
     this.isCategoryReady.next(true);
     await this.getAllPosts();
@@ -162,7 +161,7 @@ export class AuthorPostsService {
           if(jsonAuthor.company) {
             updAuthor.company = jsonAuthor.company;
           }
-          await this.sqliteService.save(this.mDb, "author", updAuthor, true);
+          await this.sqliteService.save(this.mDb, "author", updAuthor, {id: jsonAuthor.id});
           author = await this.sqliteService.findOneBy(this.mDb, "author", {id: jsonAuthor.id});
           if(author) {
             return author;
@@ -224,7 +223,7 @@ export class AuthorPostsService {
         const updCategory = new Category();
         updCategory.id = jsonCategory.id;
         updCategory.name = jsonCategory.name;
-        await this.sqliteService.save(this.mDb, "category", updCategory, true);
+        await this.sqliteService.save(this.mDb, "category", updCategory, {id: jsonCategory.id});
         category = await this.sqliteService.findOneBy(this.mDb, "category", {id: jsonCategory.id});
         if(category) {
           return category;
@@ -290,9 +289,9 @@ export class AuthorPostsService {
       }
     } else {
       if(Object.keys(jsonPost).length > 1) {
-        // update and existing post
+        // update an existing post
         const updPost = await this.createPost(jsonPost);
-        await this.sqliteService.save(this.mDb, "post", updPost, true);
+        await this.sqliteService.save(this.mDb, "post", updPost, {id: updPost.id});
         let queryValues = (await this.mDb.query('select * from post_categories_category')).values;
         await this.sqliteService.remove(this.mDb,"post_categories_category", {postId: updPost.id});
         queryValues = (await this.mDb.query('select * from post_categories_category')).values;
@@ -348,7 +347,7 @@ export class AuthorPostsService {
     const postsData: PostData[] = [];
     let prevEmail = posts![0].email;
     let prevTitle = posts![0].title;
-    let mPostData: PostData = {} as PostData;
+    let mPostData: PostData = new PostData();
     // Loop through the query value to create the postsData
     for(const post of posts!) {
 
@@ -382,7 +381,7 @@ export class AuthorPostsService {
         // create the next post
         prevEmail = post.email;
         prevTitle = post.title;
-        mPostData = {} as PostData;
+        mPostData = new PostData();
         const author = new Author();
         author.id = post.authorId;
         author.name= post.author_name;
@@ -405,9 +404,6 @@ export class AuthorPostsService {
     // add the posts to the postList
     this.postList.next(postsData);
   }
-
-
-
   /**
    * Get
    * all Ids Sequence
@@ -416,6 +412,40 @@ export class AuthorPostsService {
   async getAllIdsSeq(): Promise<void> {
       const idsSeq: IdsSeq[] = (await this.mDb.query("select * from sqlite_sequence")).values as IdsSeq[];
       this.idsSeqList.next(idsSeq);
+  }
+  /**
+     * Get Post from PostData
+     * @param post
+     * @returns
+     */
+  getJsonPostFromPostData(post: PostData): JsonPost {
+    const postJson: JsonPost = new JsonPost();
+    postJson.id = post.id;
+    postJson.title = post.title;
+    postJson.text = post.text;
+    const author: Author = post.author;
+    postJson.authorId = author.id;
+    const categoriesId: number[] = [];
+    for( const category of post.categories) {
+      categoriesId.push(category.id);
+    }
+    postJson.categoryIds = categoriesId;
+    return postJson;
+  }
+  /**
+     * Get Json Post from Post
+     * @param post
+     * @param categoryIds
+     * @returns
+     */
+  getJsonPostFromPost(post: Post, categoryIds: number[]): JsonPost {
+    const postJson: JsonPost = new JsonPost();
+    postJson.id = post.id;
+    postJson.title = post.title;
+    postJson.text = post.text;
+    postJson.authorId = post.authorId;
+    postJson.categoryIds = categoryIds;
+    return postJson;
   }
 
   /*********************
@@ -472,39 +502,5 @@ export class AuthorPostsService {
       return Promise.reject(`savePostCategoryJoin: insert changes != 1`);
     }
     return
-  }
-  /**
-     * Get Post from PostData
-     * @param post
-     * @returns
-     */
-  getJsonPostFromPostData(post: PostData): JsonPost {
-    const postJson: JsonPost = {} as JsonPost;
-    postJson.id = post.id;
-    postJson.title = post.title;
-    postJson.text = post.text;
-    const author: Author = post.author;
-    postJson.authorId = author.id;
-    const categoriesId: number[] = [];
-    for( const category of post.categories) {
-      categoriesId.push(category.id);
-    }
-    postJson.categoryIds = categoriesId;
-    return postJson;
-  }
-  /**
-     * Get Json Post from Post
-     * @param post
-     * @param categoryIds
-     * @returns
-     */
-  getJsonPostFromPost(post: Post, categoryIds: number[]): JsonPost {
-    const postJson: JsonPost = {} as JsonPost;
-    postJson.id = post.id;
-    postJson.title = post.title;
-    postJson.text = post.text;
-    postJson.authorId = post.authorId;
-    postJson.categoryIds = categoryIds;
-    return postJson;
   }
 }

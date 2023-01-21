@@ -44,9 +44,9 @@ export class PostPage implements OnInit {
         }
       } catch (err: any) {
         const msg = err.message ? err.message : err;
-        console.log(`onSubmit Post: ${err}`);
+        console.log(`onSubmit Post: ${msg}`);
         await Toast.show({
-          text: `onSubmit Post: ${err} `,
+          text: `onSubmit Post: ${msg} `,
           duration: 'long'
         });
       }
