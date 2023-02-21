@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { SQLiteService } from './sqlite.service';
+import { DbnameVersionService } from './dbname-version.service';
 import { environment } from 'src/environments/environment';
 import { deptEmployeesVersionUpgrades } from 'src/app/upgrades/employee-dept/upgrade-statements';
 
@@ -25,7 +26,9 @@ export class DepartmentEmployeesService {
   private loadToVersion = deptEmployeesVersionUpgrades[deptEmployeesVersionUpgrades.length-1].toVersion;
   private mDb!: SQLiteDBConnection;
 
-  constructor(  private sqliteService: SQLiteService) {
+  constructor(  private sqliteService: SQLiteService,
+    private dbVerService: DbnameVersionService,
+  ) {
     this.databaseName = environment.databaseNames.filter(x => x.name.includes('employees'))[0].name;
   }
 
@@ -36,9 +39,9 @@ export class DepartmentEmployeesService {
     .addUpgradeStatement({ database: this.databaseName,
                             upgrade: this.versionUpgrades});
     // create and/or open the database
-    this.mDb = await this.sqliteService
-    .openDatabase(this.databaseName, false, "no-encryption",
-                  this.loadToVersion,false);
+    await this.openDatabase();
+
+    this.dbVerService.set(this.databaseName,this.loadToVersion);
     const isData = await this.mDb.query("select * from sqlite_sequence");
     // create database initial data
     if(isData.values!.length === 0) {
@@ -47,6 +50,23 @@ export class DepartmentEmployeesService {
     if( this.sqliteService.platform === 'web') {
       await this.sqliteService.sqliteConnection.saveToStore(this.databaseName);
     }
+    await this.getAllData();
+  }
+  async openDatabase() {
+    if(this.sqliteService.native
+      && (await this.sqliteService.isInConfigEncryption()).result
+      && (await this.sqliteService.isDatabaseEncrypted(this.databaseName)).result) {
+      this.mDb = await this.sqliteService
+        .openDatabase(this.databaseName, true, "secret",
+                        this.loadToVersion,false);
+
+    } else {
+      this.mDb = await this.sqliteService
+        .openDatabase(this.databaseName, false, "no-encryption",
+                      this.loadToVersion,false);
+    }
+  }
+  async getAllData() {
     await this.getAllEmployees();
     this.isEmployeeReady.next(true);
 
@@ -54,7 +74,8 @@ export class DepartmentEmployeesService {
     this.isDepartmentReady.next(true);
     await this.getAllIdsSeq();
     this.isIdsSeqReady.next(true);
-}
+  }
+
   /**
    * Return Employee state
    * @returns

@@ -10,3 +10,22 @@
   margin-top:5%;
 }
 
+.custom-modal {
+  --backdrop-opacity: 1;
+  backdrop-filter: blur(3px);
+
+  &::part(backdrop) {
+      background: #000;
+  }
+
+  &::part(handle) {
+      background: var(--ion-color-primary);
+      width: 150px;
+      height: 6px;
+  }
+
+  &::part(content) {
+      border-radius: 0px;
+      box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 32%);
+  }
+}

@@ -26,7 +26,9 @@ export class PostsPage implements OnInit {
 
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.authorPostsService.openDatabase();
+    await this.authorPostsService.getAllData();
     this.postItemAddEL = this.elementRef.nativeElement.querySelector(`#posts-ion-item-add`);
     this.postAddEL = this.elementRef.nativeElement.querySelector(`#posts-cmp-post-add`);
     this.postUpdateEL = this.elementRef.nativeElement.querySelector(`#posts-cmp-post-update`);

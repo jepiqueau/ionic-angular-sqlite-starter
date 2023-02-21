@@ -47,6 +47,14 @@ const routes: Routes = [
     path: 'departments',
     loadChildren: () => import('./pages/employee-dept/departments/departments.module').then( m => m.DepartmentsPageModule)
   },
+  {
+    path: 'modal-passphrase',
+    loadChildren: () => import('./pages/modal-passphrase/modal-passphrase.module').then( m => m.ModalPassphrasePageModule)
+  },
+  {
+    path: 'modal-encryption',
+    loadChildren: () => import('./pages/modal-encryption/modal-encryption.module').then( m => m.ModalEncryptionPageModule)
+  },
 ];
 
 @NgModule({

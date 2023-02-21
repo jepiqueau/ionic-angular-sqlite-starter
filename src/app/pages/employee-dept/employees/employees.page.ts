@@ -25,7 +25,9 @@ export class EmployeesPage implements OnInit {
     private modalCtrl: ModalController,
     private elementRef : ElementRef) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.departmentEmployeesService.openDatabase();
+    await this.departmentEmployeesService.getAllData();
     this.employeeItemAddEL = this.elementRef.nativeElement.querySelector(`#employees-ion-item-add`);
     this.employeeAddEL = this.elementRef.nativeElement.querySelector(`#employees-cmp-employee-add`);
     this.employeeUpdateEL = this.elementRef.nativeElement.querySelector(`#employees-cmp-employee-update`);

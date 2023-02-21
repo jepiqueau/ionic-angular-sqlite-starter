@@ -21,7 +21,6 @@ export class InitializeAppService {
   async initializeApp() {
     await this.sqliteService.initializePlugin().then(async (ret) => {
       this.platform = this.sqliteService.platform;
-
       try {
         if( this.sqliteService.platform === 'web') {
           await this.sqliteService.initWebStore();

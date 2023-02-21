@@ -4,7 +4,10 @@ import { ModalController } from '@ionic/angular';
 import { PostsPage } from 'src/app/pages/author-posts/posts/posts.page';
 import { EmployeesPage } from 'src/app/pages/employee-dept/employees/employees.page';
 import { InitializeAppService } from 'src/app/services/initialize.app.service';
+import { SQLiteService } from 'src/app/services/sqlite.service';
 import { App } from '@capacitor/app';
+import { ModalPassphrasePage } from 'src/app/pages/modal-passphrase/modal-passphrase.page';
+import { ModalEncryptionPage } from 'src/app/pages/modal-encryption/modal-encryption.page';
 
 @Component({
   selector: 'app-home',
@@ -14,16 +17,22 @@ import { App } from '@capacitor/app';
 export class HomePage implements OnInit {
   isListDisplay: boolean = false;
   isAndroid: boolean = false;
+  isNative: boolean = false;
+  isEncrypt: boolean = false;
 
   constructor(private initAppService: InitializeAppService,
+    private sqliteService: SQLiteService,
     private modalCtrl: ModalController) {
       this.isListDisplay = this.initAppService.isAppInit;
   }
-  ngOnInit() {
+  async ngOnInit() {
     if (this.initAppService.platform === 'android') {
       this.isAndroid = true;
     }
-
+    this.isNative = this.sqliteService.native;
+    this.isEncrypt = this.isNative &&
+      (await this.sqliteService.isInConfigEncryption()).result
+      ? true : false;
   }
   async authorpostsClick() {
     const modal = await this.modalCtrl.create({
@@ -42,6 +51,25 @@ export class HomePage implements OnInit {
 
   exitApp() {
     App.exitApp();
+  }
+
+  async setPassphrase() {
+    const modalPassphrase = await this.modalCtrl.create({
+      component: ModalPassphrasePage,
+      breakpoints: [0.1, 0.55, 0.85],
+      initialBreakpoint: 0.55,
+      cssClass: 'custom-modal'
+    });
+    await modalPassphrase.present();
+  }
+  async dbEncryption() {
+    const modalEncryption = await this.modalCtrl.create({
+      component: ModalEncryptionPage,
+      breakpoints: [0.1, 0.85, 1],
+      initialBreakpoint: 0.85,
+      cssClass: 'custom-modal'
+    });
+    await modalEncryption.present();
   }
 
 }

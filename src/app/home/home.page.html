@@ -4,6 +4,19 @@
       SQLite Starter
     </ion-title>
     <ion-buttons slot="end">
+      <ion-button *ngIf="isEncrypt" id="popover-encrypt" >
+        <ion-icon  slot="icon-only" color="dark" name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="popover-encrypt" [dismissOnSelect]="true" side="bottom">
+        <ng-template>
+          <ion-content>
+            <ion-list>
+              <ion-item button detail="false" (click)="setPassphrase()">Passphrase</ion-item>
+              <ion-item button detail="false" (click)="dbEncryption()">Encryption</ion-item>
+            </ion-list>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
       <ion-button *ngIf="isAndroid" (click)="exitApp()">
         <ion-icon slot="icon-only" color="danger" name="exit-outline"></ion-icon>
       </ion-button>
