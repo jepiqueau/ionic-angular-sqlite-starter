@@ -11,6 +11,7 @@
 
 ### Setting the capacitor.config.ts
 
+[capacitor.config](https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/Mon-film.mp4)
 
 
 
