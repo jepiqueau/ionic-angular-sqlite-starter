@@ -10,11 +10,12 @@
 ## SQLite database with no encryption
 
 ### Setting the capacitor.config.ts
-<video width="720" height="405" controls>
+<p align="center"><br><video width="720" height="405" controls>
   <source src="https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/NoEncryption-capacitorconfig.mp4" type="video/mp4">
-</video>
+</video></p>
 
 ### Demonstration
+
 <video width="720" height="405" controls>
   <source src="https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/NoEncryption-Demo.mp4" type="video/mp4">
 </video>
