@@ -10,28 +10,23 @@
 ## SQLite database with no encryption
 
 ### Setting the capacitor.config.ts
-<p align="center"><br><video width="720" height="405" controls>
-  <source src="https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/NoEncryption-capacitorconfig.mp4" type="video/mp4">
-</video></p>
+
+-[download](https://raw.github.com/jepiqueau/ionic-angular-sqlite-starter/raw/a2d6d5fee55219e816c3886f0caa57f10fb9b69d/Documentation/NoEncryption-capacitorconfig.mp4)
+<br>
 
 ### Demonstration
 
-<video width="720" height="405" controls>
-  <source src="https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/NoEncryption-Demo.mp4" type="video/mp4">
-</video>
-
+-[download](https://raw.github.com/jepiqueau/ionic-angular-sqlite-starter/raw/a2d6d5fee55219e816c3886f0caa57f10fb9b69d/Documentation/NoEncryption-Demo.mp4)
 <br>
 
 ## SQLite database with  encryption
 
 ### Setting the capacitor.config.ts
-<video width="720" height="405" controls>
-  <source src="https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/Encryption-capacitorconfig.mp4" type="video/mp4">
-</video>
+
+-[download](https://raw.github.com/jepiqueau/ionic-angular-sqlite-starter/raw/a2d6d5fee55219e816c3886f0caa57f10fb9b69d/Documentation/Encryption-capacitorconfig.mp4 )
+<br>
 
 ### Demonstration
-<video width="720" height="405" controls>
-  <source src="https://github.com/jepiqueau/ionic-angular-sqlite-starter/raw/main/Documentation/Encryption-Demo.mp4" type="video/mp4">
-</video>
 
-
+-[download](https://raw.github.com/jepiqueau/ionic-angular-sqlite-starter/raw/a2d6d5fee55219e816c3886f0caa57f10fb9b69d/Documentation/Encryption-Demo.mp4)
+<br>
