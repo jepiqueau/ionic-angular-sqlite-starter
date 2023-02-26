@@ -63,6 +63,11 @@ Initialization of the application is made in the angular service (`src/app/servi
 
 In database version 2, `company` column was added to the `author` table.
 
+## Demonstrations
+
+[Demonstrations](https://jepiqueau.github.io/ionic-angular-sqlite-starter/)
+
+
 ## Installation
 
 To start building your App using this  App, clone this repo to a new directory:
