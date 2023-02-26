@@ -10,3 +10,15 @@ body {
   background-color: #dbdada;
   text-align: center;
 }
+.videoContainer
+{
+  position:absolute;
+  height:100%;
+  width:100%;
+  overflow: hidden;
+}
+.videoContainer video
+{
+  max-width: 98%;
+  max-height: 98%;
+}
