@@ -1,6 +1,10 @@
 <p align="center"><br><img src="https://avatars3.githubusercontent.com/u/16580653?v=4" width="128" height="128" /></p>
 
-<h3 align="center">Ionic/Angular SQLite Starter</h3>
+<h3 align="center">⛔️ DEPRECATED Ionic/Angular SQLite Starter</h3>
+<p align="center"><strong><code>REPLACED BY ionic7-angular-sqlite-starter</code></strong></p>
+<a href="https://github.com/jepiqueau/ionic7-angular-sqlite-starter"></a>
+<p align="center"><strong><code>which uses Capacitor 5</code></strong></p>
+<br>
 <p align="center"><strong><code>ionic-angular-sqlite-starter</code></strong></p>
 <p align="center">Ionic/Angular application demonstrating the use of the</p>
 <p align="center"><strong><code>@capacitor-community/sqlite</code></strong></p>
