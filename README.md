@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://github.com/jepiqueau/ionic7-angular-sqlite-starter">ionic7-angular-sqlite-starter</a>
 </p>
-<p align="center"><strong><code>which uses Capacitor 5</code></strong></p>
+<p align="center"><strong><code>which uses Ionic 7 & Capacitor 5</code></strong></p>
 <br>
 <p align="center"><strong><code>ionic-angular-sqlite-starter</code></strong></p>
 <p align="center">Ionic/Angular application demonstrating the use of the</p>
