@@ -3,7 +3,7 @@
 <h3 align="center">⛔️ DEPRECATED Ionic/Angular SQLite Starter</h3>
 <p align="center"><strong><code>REPLACED BY ionic7-angular-sqlite-starter</code></strong></p>
 <p align="center">
-  <a href="https://github.com/jepiqueau/ionic7-angular-sqlite-starter"></a>
+  <a href="https://github.com/jepiqueau/ionic7-angular-sqlite-starter">ionic7-angular-sqlite-starter</a>
 </p>
 <p align="center"><strong><code>which uses Capacitor 5</code></strong></p>
 <br>
